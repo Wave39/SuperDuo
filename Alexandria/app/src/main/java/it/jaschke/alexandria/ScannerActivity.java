@@ -1,11 +1,9 @@
 package it.jaschke.alexandria;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
@@ -16,6 +14,7 @@ public class ScannerActivity extends ActionBarActivity implements ZBarScannerVie
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+        setTitle("Scan a book's ISBN barcode");
         mScannerView = new ZBarScannerView(this);    // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
     }
