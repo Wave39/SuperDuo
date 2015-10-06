@@ -25,6 +25,8 @@ public class MainActivity extends ActionBarActivity
                     .add(R.id.container, my_main)
                     .commit();
         }
+
+        Log.i(LOG_TAG, "Football data API key: " + getString(R.string.football_data_api_key));
     }
 
 
