@@ -49,4 +49,21 @@ public class DatabaseContract
     public static final String CONTENT_AUTHORITY = "barqsoft.footballscores";
     public static final String PATH = "scores";
     public static Uri BASE_CONTENT_URI = Uri.parse("content://"+CONTENT_AUTHORITY);
+
+    // league data
+    // This set of league codes is for the 2015/2016 season. In fall of 2016, they will need to
+    // be updated. Feel free to use the codes
+    public static final int BUNDESLIGA1 = 394;
+    public static final int BUNDESLIGA2 = 395;
+    public static final int LIGUE1 = 396;
+    public static final int LIGUE2 = 397;
+    public static final int PREMIER_LEAGUE = 398;
+    public static final int PRIMERA_DIVISION = 399;
+    public static final int SEGUNDA_DIVISION = 400;
+    public static final int SERIE_A = 401;
+    public static final int PRIMERA_LIGA = 402;
+    public static final int BUNDESLIGA3 = 403;
+    public static final int EREDIVISIE = 404;
+    public static final int CHAMPIONS_LEAGUE = 405;
+
 }

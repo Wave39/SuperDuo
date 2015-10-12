@@ -5,26 +5,28 @@ package barqsoft.footballscores;
  */
 public class Utilies
 {
-    public static final int SERIE_A = 357;
-    public static final int PREMIER_LEGAUE = 354;
-    public static final int CHAMPIONS_LEAGUE = 362;
-    public static final int PRIMERA_DIVISION = 358;
-    public static final int BUNDESLIGA = 351;
     public static String getLeague(int league_num)
     {
         switch (league_num)
         {
-            case SERIE_A : return "Seria A";
-            case PREMIER_LEGAUE : return "Premier League";
-            case CHAMPIONS_LEAGUE : return "UEFA Champions League";
-            case PRIMERA_DIVISION : return "Primera Division";
-            case BUNDESLIGA : return "Bundesliga";
-            default: return "Not known League Please report";
+            case DatabaseContract.BUNDESLIGA1 : return "1. Bundesliga 2015/16";
+            case DatabaseContract.BUNDESLIGA2 : return "2. Bundesliga 2015/16";
+            case DatabaseContract.LIGUE1: return "Ligue 1 2015/16";
+            case DatabaseContract.LIGUE2: return "Ligue 2 2015/16";
+            case DatabaseContract.PREMIER_LEAGUE : return "Premier League 2015/16";
+            case DatabaseContract.PRIMERA_DIVISION : return "Primera Division 2015/16";
+            case DatabaseContract.SEGUNDA_DIVISION : return "Segunda Division 2015/16";
+            case DatabaseContract.SERIE_A : return "Serie A 2015/16";
+            case DatabaseContract.PRIMERA_LIGA : return "Primera Liga 2015/16";
+            case DatabaseContract.BUNDESLIGA3 : return "3. Bundesliga 2015/16";
+            case DatabaseContract.EREDIVISIE: return "Eredivisie 2015/16";
+            case DatabaseContract.CHAMPIONS_LEAGUE : return "Champions League 2015/16";
+            default: return "Unknown League (" + String.valueOf(league_num) + ")";
         }
     }
     public static String getMatchDay(int match_day,int league_num)
     {
-        if(league_num == CHAMPIONS_LEAGUE)
+        if(league_num == DatabaseContract.CHAMPIONS_LEAGUE)
         {
             if (match_day <= 6)
             {
