@@ -26,8 +26,10 @@ import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.R;
 
 /**
+ * myFetchService
  * Created by yehya khaled on 3/2/2015.
  */
+
 public class myFetchService extends IntentService
 {
     public static final String LOG_TAG = "myFetchService";
@@ -41,8 +43,6 @@ public class myFetchService extends IntentService
     {
         getData("n2");
         getData("p2");
-
-        return;
     }
 
     private void getData (String timeFrame)
@@ -68,7 +68,7 @@ public class myFetchService extends IntentService
 
             // Read the input stream into a String
             InputStream inputStream = m_connection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return;
@@ -80,7 +80,7 @@ public class myFetchService extends IntentService
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
@@ -131,7 +131,7 @@ public class myFetchService extends IntentService
             Log.e(LOG_TAG,e.getMessage());
         }
     }
-    private void processJSONdata (String JSONdata,Context mContext, boolean isReal)
+    private void processJSONdata (String JSONdata, Context mContext, boolean isReal)
     {
         //JSON data
         // This set of league codes is for the 2015/2016 season. In fall of 2016, they will need to
@@ -145,7 +145,7 @@ public class myFetchService extends IntentService
         final String SEGUNDA_DIVISION = "400";
         final String SERIE_A = "401";
         final String PRIMERA_LIGA = "402";
-        final String Bundesliga3 = "403";
+        final String BUNDESLIGA3 = "403";
         final String EREDIVISIE = "404";
 
 
@@ -164,23 +164,16 @@ public class myFetchService extends IntentService
         final String MATCH_DAY = "matchday";
 
         //Match data
-        String League = null;
-        String mDate = null;
-        String mTime = null;
-        String Home = null;
-        String Away = null;
-        String Home_goals = null;
-        String Away_goals = null;
-        String match_id = null;
-        String match_day = null;
-
+        String League, mDate, mTime;
+        String Home, Away, Home_goals, Away_goals;
+        String match_id, match_day;
 
         try {
             JSONArray matches = new JSONObject(JSONdata).getJSONArray(FIXTURES);
 
 
             //ContentValues to be inserted
-            Vector<ContentValues> values = new Vector <ContentValues> (matches.length());
+            Vector<ContentValues> values = new Vector <> (matches.length());
             for(int i = 0;i < matches.length();i++)
             {
 
@@ -192,11 +185,18 @@ public class myFetchService extends IntentService
                 //add leagues here in order to have them be added to the DB.
                 // If you are finding no data in the app, check that this contains all the leagues.
                 // If it doesn't, that can cause an empty DB, bypassing the dummy data routine.
-                if(     League.equals(PREMIER_LEAGUE)      ||
+                if(League.equals(PREMIER_LEAGUE)      ||
                         League.equals(SERIE_A)             ||
                         League.equals(BUNDESLIGA1)         ||
                         League.equals(BUNDESLIGA2)         ||
-                        League.equals(PRIMERA_DIVISION)     )
+                        League.equals(PRIMERA_DIVISION)    ||
+                        League.equals(LIGUE1)    ||
+                        League.equals(LIGUE2)    ||
+                        League.equals(SEGUNDA_DIVISION)    ||
+                        League.equals(PRIMERA_LIGA)    ||
+                        League.equals(BUNDESLIGA3)    ||
+                        League.equals(EREDIVISIE)
+                        )
                 {
                     match_id = match_data.getJSONObject(LINKS).getJSONObject(SELF).
                             getString("href");
@@ -259,13 +259,14 @@ public class myFetchService extends IntentService
                     values.add(match_values);
                 }
             }
-            int inserted_data = 0;
+
             ContentValues[] insert_data = new ContentValues[values.size()];
             values.toArray(insert_data);
+
+            int inserted_data = 0;
             inserted_data = mContext.getContentResolver().bulkInsert(
                     DatabaseContract.BASE_CONTENT_URI,insert_data);
-
-            //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
+            Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
         }
         catch (JSONException e)
         {
