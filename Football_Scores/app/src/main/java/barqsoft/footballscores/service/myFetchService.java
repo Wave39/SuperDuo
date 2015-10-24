@@ -1,5 +1,6 @@
 package barqsoft.footballscores.service;
 
+import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Context;
@@ -90,7 +91,7 @@ public class myFetchService extends IntentService
         }
         catch (Exception e)
         {
-            Log.e(LOG_TAG,"Exception here" + e.getMessage());
+            Log.e(LOG_TAG,"Exception here " + e.getMessage());
         }
         finally {
             if(m_connection != null)
@@ -184,11 +185,11 @@ public class myFetchService extends IntentService
                     mDate = match_data.getString(MATCH_DATE);
                     mTime = mDate.substring(mDate.indexOf("T") + 1, mDate.indexOf("Z"));
                     mDate = mDate.substring(0,mDate.indexOf("T"));
-                    SimpleDateFormat match_date = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat match_date = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
                     match_date.setTimeZone(TimeZone.getTimeZone("UTC"));
                     try {
                         Date parseddate = match_date.parse(mDate+mTime);
-                        SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd:HH:mm");
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd:HH:mm");
                         new_date.setTimeZone(TimeZone.getDefault());
                         mDate = new_date.format(parseddate);
                         mTime = mDate.substring(mDate.indexOf(":") + 1);
@@ -197,7 +198,7 @@ public class myFetchService extends IntentService
                         if(!isReal){
                             //This if statement changes the dummy data's date to match our current date range.
                             Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
-                            SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+                            @SuppressLint("SimpleDateFormat") SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
                             mDate=mformat.format(fragmentdate);
                         }
                     }
@@ -238,8 +239,7 @@ public class myFetchService extends IntentService
             ContentValues[] insert_data = new ContentValues[values.size()];
             values.toArray(insert_data);
 
-            int inserted_data = 0;
-            inserted_data = mContext.getContentResolver().bulkInsert(
+            int inserted_data = mContext.getContentResolver().bulkInsert(
                     DatabaseContract.BASE_CONTENT_URI,insert_data);
             Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
         }
