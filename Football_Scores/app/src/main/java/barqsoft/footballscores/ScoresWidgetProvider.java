@@ -51,8 +51,8 @@ public class ScoresWidgetProvider extends AppWidgetProvider {
             int visitorGoals = Math.max(cursor.getInt(7), 0);
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.scores_widget);
-            remoteViews.setTextViewText(R.id.homeTextView, Integer.toString(homeGoals) + " " + homeTeamName);
-            remoteViews.setTextViewText(R.id.visitorTextView, Integer.toString(visitorGoals) + " " + visitorTeamName);
+            remoteViews.setTextViewText(R.id.homeTextView, Integer.toString(homeGoals) + "  " + homeTeamName);
+            remoteViews.setTextViewText(R.id.visitorTextView, Integer.toString(visitorGoals) + "  " + visitorTeamName);
 
             Intent intent = new Intent(context, ScoresWidgetProvider.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
