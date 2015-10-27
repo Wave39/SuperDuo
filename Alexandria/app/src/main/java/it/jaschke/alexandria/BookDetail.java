@@ -2,10 +2,12 @@ package it.jaschke.alexandria;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Patterns;
@@ -26,10 +28,8 @@ import it.jaschke.alexandria.services.DownloadImage;
 public class BookDetail extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String EAN_KEY = "EAN";
-    private final int LOADER_ID = 10;
     private View rootView;
     private String ean;
-    private String bookTitle;
     private ShareActionProvider shareActionProvider;
 
     public BookDetail(){
@@ -48,6 +48,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         Bundle arguments = getArguments();
         if (arguments != null) {
             ean = arguments.getString(BookDetail.EAN_KEY);
+            int LOADER_ID = 10;
             getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
 
@@ -87,19 +88,23 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (!data.moveToFirst()) {
             return;
         }
 
-        bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
+        String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
         ((TextView) rootView.findViewById(R.id.fullBookTitle)).setText(bookTitle);
 
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text)+bookTitle);
-        shareActionProvider.setShareIntent(shareIntent);
+        if (shareActionProvider != null) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            }
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
+            shareActionProvider.setShareIntent(shareIntent);
+        }
 
         String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
         ((TextView) rootView.findViewById(R.id.fullBookSubTitle)).setText(bookSubTitle);
@@ -108,9 +113,18 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         ((TextView) rootView.findViewById(R.id.fullBookDesc)).setText(desc);
 
         String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authors.split(",");
-        ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
-        ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",","\n"));
+        if (authors == null)
+        {
+            ((TextView) rootView.findViewById(R.id.authors)).setLines(0);
+            ((TextView) rootView.findViewById(R.id.authors)).setText("");
+        }
+        else
+        {
+            String[] authorsArr = authors.split(",");
+            ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
+            ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",","\n"));
+        }
+
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
         if(Patterns.WEB_URL.matcher(imgUrl).matches()){
             new DownloadImage((ImageView) rootView.findViewById(R.id.fullBookCover)).execute(imgUrl);
