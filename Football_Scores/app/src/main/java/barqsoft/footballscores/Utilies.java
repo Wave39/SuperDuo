@@ -1,57 +1,63 @@
 package barqsoft.footballscores;
 
+import android.content.res.Resources;
+
 /**
+ * Utilities.java
  * Created by yehya khaled on 3/3/2015.
  */
+
 public class Utilies
 {
     public static String getLeague(int league_num)
     {
+        Resources res = Resources.getSystem();
         switch (league_num)
         {
-            case DatabaseContract.BUNDESLIGA1 : return "1. Bundesliga 2015/16";
-            case DatabaseContract.BUNDESLIGA2 : return "2. Bundesliga 2015/16";
-            case DatabaseContract.LIGUE1: return "Ligue 1 2015/16";
-            case DatabaseContract.LIGUE2: return "Ligue 2 2015/16";
-            case DatabaseContract.PREMIER_LEAGUE : return "Premier League 2015/16";
-            case DatabaseContract.PRIMERA_DIVISION : return "Primera Division 2015/16";
-            case DatabaseContract.SEGUNDA_DIVISION : return "Segunda Division 2015/16";
-            case DatabaseContract.SERIE_A : return "Serie A 2015/16";
-            case DatabaseContract.PRIMERA_LIGA : return "Primera Liga 2015/16";
-            case DatabaseContract.BUNDESLIGA3 : return "3. Bundesliga 2015/16";
-            case DatabaseContract.EREDIVISIE: return "Eredivisie 2015/16";
-            case DatabaseContract.CHAMPIONS_LEAGUE : return "Champions League 2015/16";
-            default: return "Unknown League (" + String.valueOf(league_num) + ")";
+            case DatabaseContract.BUNDESLIGA1 : return res.getString(R.string.bundesliga1);
+            case DatabaseContract.BUNDESLIGA2 : return res.getString(R.string.bundesliga2);
+            case DatabaseContract.LIGUE1: return res.getString(R.string.ligue1);
+            case DatabaseContract.LIGUE2: return res.getString(R.string.ligue2);
+            case DatabaseContract.PREMIER_LEAGUE : return res.getString(R.string.premier_league);
+            case DatabaseContract.PRIMERA_DIVISION : return res.getString(R.string.primera_division);
+            case DatabaseContract.SEGUNDA_DIVISION : return res.getString(R.string.segunda_division);
+            case DatabaseContract.SERIE_A : return res.getString(R.string.serie_a);
+            case DatabaseContract.PRIMERA_LIGA : return res.getString(R.string.primera_liga);
+            case DatabaseContract.BUNDESLIGA3 : return res.getString(R.string.bundesliga3);
+            case DatabaseContract.EREDIVISIE: return res.getString(R.string.eredivisie);
+            case DatabaseContract.CHAMPIONS_LEAGUE : return res.getString(R.string.champions_league);
+            default: return res.getString(R.string.unknown_league) + "(" + String.valueOf(league_num) + ")";
         }
     }
     public static String getMatchDay(int match_day,int league_num)
     {
+        Resources res = Resources.getSystem();
         if(league_num == DatabaseContract.CHAMPIONS_LEAGUE)
         {
             if (match_day <= 6)
             {
-                return "Group Stages, Matchday : 6";
+                return res.getString(R.string.group_stages) + ", " + res.getString(R.string.matchday) + " : 6";
             }
             else if(match_day == 7 || match_day == 8)
             {
-                return "First Knockout round";
+                return res.getString(R.string.first_knockout_round);
             }
             else if(match_day == 9 || match_day == 10)
             {
-                return "QuarterFinal";
+                return res.getString(R.string.quarter_final);
             }
             else if(match_day == 11 || match_day == 12)
             {
-                return "SemiFinal";
+                return res.getString(R.string.semi_final);
             }
             else
             {
-                return "Final";
+                return res.getString(R.string.final_text);
             }
         }
         else
         {
-            return "Matchday : " + String.valueOf(match_day);
+            return res.getString(R.string.matchday) + " : " + String.valueOf(match_day);
         }
     }
 
